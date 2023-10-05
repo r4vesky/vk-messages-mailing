@@ -16,7 +16,7 @@ const keyboard = {};
     token,
   });
 
-  let { count } = await vk.api.messages.getConversations({ count: 100 });
+  let { count } = await vk.api.messages.getConversations();
 
   let iterations = Math.round(count / 100);
   let promises = [];
