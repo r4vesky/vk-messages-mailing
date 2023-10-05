@@ -44,8 +44,15 @@ const keyboard = {};
           console.log(`Iteration: ${index + 1}, items: ${itemsCount}`);
 
           let user_ids = items
-            .map((item) => item.conversation.peer.id)
-            .join(",");
+            .filter((item) => {
+              let { conversation } = item;
+
+              let isUser = conversation.peer.type === "user";
+              let canWrite = conversation.can_write.allowed === true;
+
+              return isUser && canWrite;
+            })
+            .map((item) => item.conversation.peer.id);
 
           let params = {
             user_ids,
