@@ -39,8 +39,6 @@ const keyboard = {};
 
           let itemsCount = items.length;
 
-          processedItems += itemsCount;
-
           console.log(`Iteration: ${index + 1}, items: ${itemsCount}`);
 
           let user_ids = items
@@ -53,6 +51,8 @@ const keyboard = {};
               return isUser && canWrite;
             })
             .map((item) => item.conversation.peer.id);
+
+          processedItems += user_ids.length;
 
           let params = {
             user_ids,
