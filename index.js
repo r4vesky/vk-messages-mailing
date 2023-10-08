@@ -22,6 +22,7 @@ const keyboard = {};
   let promises = [];
 
   let processedItems = 0;
+  let processedIds = [];
 
   console.log(`Iterations count: ${iterations}`);
 
@@ -37,10 +38,6 @@ const keyboard = {};
 
           let { items } = currentIterationConversations;
 
-          let itemsCount = items.length;
-
-          console.log(`Iteration: ${index + 1}, items: ${itemsCount}`);
-
           let user_ids = items
             .filter((item) => {
               let { conversation } = item;
@@ -50,7 +47,10 @@ const keyboard = {};
 
               return isUser && canWrite;
             })
+            .filter((item) => !processedIds.includes(item.conversation.peer.id))
             .map((item) => item.conversation.peer.id);
+
+          processedIds = processedIds.concat(user_ids);
 
           processedItems += user_ids.length;
 
