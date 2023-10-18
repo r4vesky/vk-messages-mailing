@@ -20,6 +20,7 @@ const keyboard = {};
 
   let iterations = Math.round(count / 100);
   let ids = [];
+  let sendedIds = [];
 
   let startedAt = Date.now();
 
@@ -59,12 +60,22 @@ const keyboard = {};
     Array(iterations)
       .fill({})
       .forEach(async (_, index) => {
+        let user_ids = ids.slice(index * 100, index * 100 + 99).filter(x => !sendedIds.find(e => e === x));
+
+        if (user_ids.length < 1 || user_ids.length + 1 >= ids) {
+          console.log(`------------------------------------------------`);
+          console.log(`Completed in ${(Date.now() - startedAt) / 1000}s`);
+          console.log(`Totally sended: ${ids.length} messages`);
+        }
+
         let params = {
-          user_ids: ids.slice(index * 100, index * 100 + 99),
+          user_ids,
           message,
           attachment,
           random_id: Math.random(),
         };
+
+        sendedIds = sendedIds.concat(params.user_ids);
 
         if (Object.keys(keyboard).length > 0) {
           params["keyboard"] = JSON.stringify(keyboard);
@@ -75,12 +86,6 @@ const keyboard = {};
         console.log(
           `Iteration #${index + 1} | Users: ${params.user_ids.length}`
         );
-
-        if (index * 100 + 99 >= ids.length) {
-          console.log(`------------------------------------------------`);
-          console.log(`Completed in ${(Date.now() - startedAt) / 1000}s`);
-          console.log(`Totally sended: ${ids.length} messages`);
-        }
       });
-  }, 1);
+  }, 20000);
 })();
